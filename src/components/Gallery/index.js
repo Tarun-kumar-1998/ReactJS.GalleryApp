@@ -75,26 +75,35 @@ const imagesList = [
 
 class Gallery extends Component {
   state = {
-    selectedImage: 1,
+    selectedImage: imagesList[5].id,
   }
 
-  getCoverImage = () => {
+  clickThumbnailItem = id => {
+    this.setState({selectedImage: id})
+  }
+
+  renderSelectedImage = () => {
     const {selectedImage} = this.state
-    const coverImg = imagesList.filter(eachimg => selectedImage === eachimg.id)
-    console.log(coverImg)
-    return coverImg
+    const {imageUrl, imageAltText} = imagesList[selectedImage]
+    console.log(imageAltText)
+    return <img src={imageUrl} className="selected-image" alt={imageAltText} />
   }
 
   render() {
-    const cover = this.getCoverImage
+    const selectedImage = this.state
     return (
       <div className="bg">
         <h1 className="hd">Nature Photography</h1>
         <p className="para">Nature Photography by Rahul</p>
-        <img src={cover.imageUrl} alt={cover.imageAltText} />
+        {this.renderSelectedImage()}
         <ul className="con">
           {imagesList.map(image => (
-            <ThumbnailItem key={image.id} image={image} />
+            <ThumbnailItem
+              key={image.id}
+              image={image}
+              isActive={selectedImage === image.id}
+              clickThumbnailItem={this.clickThumbnailItem}
+            />
           ))}
         </ul>
       </div>
